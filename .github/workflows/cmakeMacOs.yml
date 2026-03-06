@@ -95,6 +95,9 @@ jobs:
 
     - name: Create DMG
       run: |
+        # Sign both the dylibs and the application bundle to avoid the "This application is damaged" popup
+        find ./bundle/libresprite.app/Contents/libs/ -name "*.dylib" \
+        -exec codesign --force --sign - {} \;
         codesign --force --deep -s - ./bundle/libresprite.app
         hdiutil create -volname "LibreSprite" -srcfolder bundle -ov -format UDZO "libresprite.dmg"
 
